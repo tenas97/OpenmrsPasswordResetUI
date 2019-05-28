@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "name": "OpenmrsPasswordResetUI",
+  "description": "User Interface for OpenMRS password reset feature",
+  "launch_path": "index.html",
+  "icons": {
+    "48": "/img/omrs-button.png"
+  },
+  "developer": {
+    "name": "tenas97",
+    "url": "https://github.com/tenas97/openmrs-owa-openmrspasswordresetui"
+  },
+  "default_locale": "en",
+    "activities": {
+      "openmrs": {
+        "href": "*"
+      }
+    }
+}
