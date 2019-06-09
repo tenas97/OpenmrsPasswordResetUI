@@ -6,14 +6,87 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React from 'react';
+import React from 'react'; 
+import styleReferenceapplication from '@openmrs/style-referenceapplication'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLock } from '@fortawesome/free-solid-svg-icons'
 
-export default class App extends React.Component {
-  render() {
+
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.showToast = this.showToast.bind(this);
+        state = {
+            emailorusername: "",
+            message: "",
+            error: "",
+            validation: ""
+        };
+      }
+
+      handleSubmit() {
+        if(this.state.emailorusername){
+        this.setState({
+          validation: true
+        });
+      }
+      if(this.state.validation){
+        showToast();
+      }
+      }
+      showToast() {
+        
+      }
+    
+  render(){
     return (
-      <div>
-        <h1>Hello, world</h1>
+    <div id="body-wrapper">
+      <div id="content">
+      <form id="password_reset">
+        <fieldset>
+          <legend>
+              <FontAwesomeIcon icon={faLock}/> Forgot Password
+          </legend>
+          <p className="left">
+          <label>
+              Please Enter Your Username Or Email
+          </label>
+            <input
+              type="email"
+                  placeholder="Your email address or Username"
+                //   value={this.state.email}
+                  name="email/username"
+                  onChange={e =>
+                      this.setState({
+                          emailorusername: e.target.value,
+                          message: "",
+                          error: "",
+                          validation: ""
+                      })
+                  }
+                  autoFocus
+              />
+            </p>
+            <button
+                  onClick={this.handleSubmit}
+                  className="confirm"
+                  id="passwordResetButton"
+                  type="submit"
+              >
+                 Send Password Reset Link
+              </button>
+              
+        </fieldset>
+          </form>
       </div>
-    )
+    </div>
+  );
   }
-}
+  
+  }
+
+  export default App;
+  
+

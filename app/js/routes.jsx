@@ -8,11 +8,15 @@
  */
 import React from 'react'
 import {Route} from 'react-router'
+import {Switch} from 'react-router-dom'
+import Home from './components/core/Home'
 import App from './components/App'
 
 export default () => {
   return (
-    <Route path="/" component={App}>
-    </Route>
+    <Switch>
+      <Route exact path="/" component={App}/>
+      <Route exact path="/home" component={Home}/>
+    </Switch>
   );
 }
