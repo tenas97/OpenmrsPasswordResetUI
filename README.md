@@ -4,7 +4,7 @@
 
 This repository contains the OpenmrsPasswordResetUI OpenMRS Open Web App.
 
-> Add a description of what your app does here.
+> User Interface for OpenMRS password reset feature
 
 For further documentation about OpenMRS Open Web Apps see
 [the wiki page](https://wiki.openmrs.org/display/docs/Open+Web+Apps+Module).
@@ -27,7 +27,7 @@ Build the distributable using [Webpack](https://webpack.github.io/) as follows:
 npm run build:prod
 ````
 
-This will create a file called `openmrspasswordresetui.zip` file in the `dist` directory,
+This will create a file called `openmrspasswordresetui.zip` file,
 which can be uploaded to the OpenMRS Open Web Apps module.
 
 ### Local Deploy
@@ -38,14 +38,14 @@ To deploy directly to your local Open Web Apps directory, run:
 npm run build:deploy
 ````
 
-This will build and deploy the app to the `/Users/tendongeryanawo-nasako/.OpenMRS/owa`
+This will build and deploy the app to your local Open Web Apps
 directory. To change the deploy directory, edit the `LOCAL_OWA_FOLDER` entry in
 `config.json`. If this file does not exists, create one in the root directory
 that looks like:
 
 ```js
 {
-  "LOCAL_OWA_FOLDER": "/Users/tendongeryanawo-nasako/.OpenMRS/owa"
+  "LOCAL_OWA_FOLDER": "path to your local Open Web Apps directory"
 }
 ```
 
@@ -57,7 +57,7 @@ will need the `APP_ENTRY_POINT` entry in your `config.json` file:
 
 ```js
 {
-  "LOCAL_OWA_FOLDER": "/Users/tendongeryanawo-nasako/.OpenMRS/owa",
+  "LOCAL_OWA_FOLDER": "path to your local Open Web Apps directory",
   "APP_ENTRY_POINT": "http://localhost:8080/openmrs/owa/openmrspasswordresetui/index.html"
 }
 ```
