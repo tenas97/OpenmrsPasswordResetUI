@@ -9,12 +9,11 @@
 import React from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
-import '@openmrs/style-referenceapplication/src/sass/fragments/_toast.scss'
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
-        state = {
+        this.state = {
             password: "",
             message: "",
             error: "",

@@ -7,18 +7,15 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react'; 
-import styleReferenceapplication from '@openmrs/style-referenceapplication'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons'
-
-
+import Axios from 'axios';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.showToast = this.showToast.bind(this);
-        state = {
+        this.state = {
             emailorusername: "",
             message: "",
             error: "",
@@ -26,24 +23,25 @@ class App extends React.Component {
         };
       }
 
-      handleSubmit() {
-        if(this.state.emailorusername){
-        this.setState({
-          validation: true
-        });
-      }
-      if(this.state.validation){
-        showToast();
-      }
-      }
-      showToast() {
-        
-      }
-    
+      handleSubmit(e) {
+        e.preventDefault();
+      //   if(this.state.emailorusername){
+      //   this.setState({
+      //     validation: true
+      //   });
+      // }
+      Axios.post(' http://localhost:8080/openmrs/ws/rest/v1/passwordreset', {usernameOrEmail: this.state.emailorusername})
+      .then(function (response) {
+        console.log(response);
+      })
+    }
   render(){
     return (
     <div id="body-wrapper">
       <div id="content">
+      {/* <div>
+        <Toast email={this.state.emailorusername} type="email" success="success"></Toast>
+      </div> */}
       <form id="password_reset">
         <fieldset>
           <legend>
@@ -85,7 +83,7 @@ class App extends React.Component {
   );
   }
   
-  }
+}
 
   export default App;
   
