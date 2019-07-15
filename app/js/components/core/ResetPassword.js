@@ -9,16 +9,36 @@
 import React from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
+import Axios from "axios";
 
-class Home extends React.Component {
+class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             password: "",
+            passwordConfirmation: "",
             message: "",
             error: "",
+            activationKey: "",
         };
       }
+
+      componentDidMount() {
+        console.log(this.props.params.activationKey);
+        this.setState({
+          activationKey: this.props.params.activationKey
+        })
+     }
+
+  handleSubmit(e){
+    e.preventDefault();
+    alert("NAS");
+    alert(this.state.activationKey);
+    if(this.state.password === this.state.passwordConfirmation){
+      Axios.post(`http://localhost:8080/openmrs/ws/rest/v1/passwordreset/{this.state.activationKey}`)
+    }
+  }
     
   render(){
     return (
@@ -34,15 +54,13 @@ class Home extends React.Component {
               Enter Your New Password
           </label>
             <input
-              type="text"
+              type="password"
                   placeholder="New Password"
                   value={this.state.password}
                   name="newPassword"
                   onChange={e =>
                       this.setState({
-                          emailorusername: e.target.value,
-                          message: "",
-                          error: ""
+                          password: e.target.value,
                       })
                   }
                   autoFocus
@@ -53,15 +71,13 @@ class Home extends React.Component {
               Confirm New Password
           </label>
             <input
-              type="text"
+              type="password"
                   placeholder="Confirm Password"
-                  value={this.state.password}
+                  value={this.state.passwordConfirmation}
                   name="confirmPassword"
                   onChange={e =>
                       this.setState({
-                          emailorusername: e.target.value,
-                          message: "",
-                          error: ""
+                          passwordConfirmation: e.target.value,
                       })
                   }
                   autoFocus
@@ -69,12 +85,12 @@ class Home extends React.Component {
             </p>
         </fieldset>
         <button
-                  onClick=""
+                  onClick={this.handleSubmit}
                   className="confirm"
                   id="passwordResetButton"
                   type="submit"
               >
-                  Reset Password
+                  Reset Your Password
               </button>
               
           </form>
@@ -84,4 +100,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default ResetPassword;

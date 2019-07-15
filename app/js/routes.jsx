@@ -7,16 +7,17 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react'
-import {Route} from 'react-router'
-import {Switch} from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import ResetPassword from './components/core/ResetPassword'
 import App from './components/App'
 
 export default () => {
   return (
-    <Switch>
-      <Route exact path="/" component={App}/>
-      <Route exact path="/resetPassword" component={ResetPassword}/>
-    </Switch>
+    <Router>
+      <div>
+        <Route exact path="/" component={App}/>
+        <Route path="/resetPassword/:activationKey" component={ResetPassword}/>
+      </div>
+    </Router>
   );
 }

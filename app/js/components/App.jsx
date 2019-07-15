@@ -54,7 +54,6 @@ class App extends React.Component {
             <input
               type="email"
                   placeholder="Your email address or Username"
-                //   value={this.state.email}
                   name="email/username"
                   onChange={e =>
                       this.setState({
@@ -73,7 +72,7 @@ class App extends React.Component {
                   id="passwordResetButton"
                   type="submit"
               >
-                 Send Password Reset Link
+                 Reset Password
               </button>
               
         </fieldset>
