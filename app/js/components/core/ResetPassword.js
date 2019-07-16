@@ -33,10 +33,12 @@ class ResetPassword extends React.Component {
 
   handleSubmit(e){
     e.preventDefault();
-    alert("NAS");
-    alert(this.state.activationKey);
+    let activationKeyString = this.state.activationKey;
     if(this.state.password === this.state.passwordConfirmation){
-      Axios.post(`http://localhost:8080/openmrs/ws/rest/v1/passwordreset/{this.state.activationKey}`)
+      Axios.post("http://localhost:8080/openmrs/ws/rest/v1/passwordreset/".concat(activationKeyString), {newPassword: this.state.password })
+      .then(function (response) {
+        console.log(response);
+      })
     }
   }
     
@@ -74,7 +76,7 @@ class ResetPassword extends React.Component {
               type="password"
                   placeholder="Confirm Password"
                   value={this.state.passwordConfirmation}
-                  name="confirmPassword"
+                  name="newPassword"
                   onChange={e =>
                       this.setState({
                           passwordConfirmation: e.target.value,
