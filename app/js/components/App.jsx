@@ -10,6 +10,8 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios';
+import Bowser from "bowser";
+import { geolocated } from "react-geolocated";
 
 class App extends React.Component {
     constructor(props) {
@@ -30,14 +32,20 @@ class App extends React.Component {
       //     validation: true
       //   });
       // }
-      Axios.post(' http://localhost:8080/openmrs/ws/rest/v1/passwordreset', {usernameOrEmail: this.state.emailorusername})
+      const browser = Bowser.getParser(window.navigator.userAgent);
+      Axios.post(' http://localhost:8080/openmrs/ws/rest/v1/passwordreset', 
+      {usernameOrEmail: this.state.emailorusername, 
+       browserName : browser.getBrowserName() + " browser, version " + browser.getBrowserVersion(),
+       operatingSystem : browser.getOSName() + " operating system, version " + browser.getOSVersion(),
+       platform : browser.getPlatformType() + " device designed by " + browser.getPlatform().vendor})
       .then(function (response) {
         console.log(response);
+        console.log(Bowser.parse(window.navigator.userAgent));
       })
     }
   render(){
     return (
-    <div id="body-wrapper">
+      <div id="body-wrapper">
       <div id="content">
       {/* <div>
         <Toast email={this.state.emailorusername} type="email" success="success"></Toast>
