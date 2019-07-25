@@ -9,23 +9,23 @@
 import React from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
-import Axios from "axios";
+import Axios from 'axios'
+import PasswordStrengthMeter from './PasswordStrengthMeter'
 
 class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.state = {
             password: "",
             passwordConfirmation: "",
-            message: "",
             error: "",
             activationKey: "",
         };
       }
 
       componentDidMount() {
-        console.log(this.props.params.activationKey);
         this.setState({
           activationKey: this.props.params.activationKey
         })
@@ -35,14 +35,37 @@ class ResetPassword extends React.Component {
     e.preventDefault();
     let activationKeyString = this.state.activationKey;
     if(this.state.password === this.state.passwordConfirmation){
-      Axios.post("http://localhost:8080/openmrs/ws/rest/v1/passwordreset/".concat(activationKeyString), {newPassword: this.state.password })
+      Axios.post(`http://localhost:8080/openmrs/ws/rest/v1/passwordreset/${activationKeyString}`, {newPassword: this.state.password })
       .then(function (response) {
         console.log(response);
       })
     }
   }
-    
+
+  handleChange(e){
+    this.setState({
+      passwordConfirmation: e.target.value,
+    })
+  }
+
   render(){
+    let notification;
+    let passwordStrength;
+    let flag = true;
+    let disabled = "";
+    if(this.state.password === this.state.passwordConfirmation){
+      flag = true;
+    }
+    else{
+       flag = false
+       disabled =true;
+    }
+    if(!flag && this.state.passwordConfirmation){
+      notification = <span className='message'><i>(Passwords do not match)</i></span>
+    }
+    if(this.state.password){
+     passwordStrength= <PasswordStrengthMeter password={this.state.password}/>  
+    }
     return (
     <div id="body-wrapper">
       <div id="content">
@@ -53,7 +76,7 @@ class ResetPassword extends React.Component {
           </legend>
           <p className="left">
           <label>
-              Enter Your New Password
+              Enter Your New Password   
           </label>
             <input
               type="password"
@@ -68,29 +91,27 @@ class ResetPassword extends React.Component {
                   autoFocus
               />
             </p>
-            <p className="left">
+            {passwordStrength}
+                    
+          <p className="left">
           <label>
-              Confirm New Password
+              Confirm New Password  {notification}
           </label>
             <input
               type="password"
                   placeholder="Confirm Password"
                   value={this.state.passwordConfirmation}
                   name="newPassword"
-                  onChange={e =>
-                      this.setState({
-                          passwordConfirmation: e.target.value,
-                      })
-                  }
-                  autoFocus
+                  onChange={this.handleChange}
               />
             </p>
         </fieldset>
-        <button
+        <button   
                   onClick={this.handleSubmit}
                   className="confirm"
                   id="passwordResetButton"
                   type="submit"
+                  disabled={disabled}
               >
                   Reset Your Password
               </button>
@@ -99,7 +120,7 @@ class ResetPassword extends React.Component {
       </div>
     </div>
   );
-  }
+}
 }
 
 export default ResetPassword;

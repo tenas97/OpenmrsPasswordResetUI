@@ -10,9 +10,6 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios';
-import Bowser from "bowser";
-import { geolocated } from "react-geolocated";
-
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -32,15 +29,10 @@ class App extends React.Component {
       //     validation: true
       //   });
       // }
-      const browser = Bowser.getParser(window.navigator.userAgent);
       Axios.post(' http://localhost:8080/openmrs/ws/rest/v1/passwordreset', 
-      {usernameOrEmail: this.state.emailorusername, 
-       browserName : browser.getBrowserName() + " browser, version " + browser.getBrowserVersion(),
-       operatingSystem : browser.getOSName() + " operating system, version " + browser.getOSVersion(),
-       platform : browser.getPlatformType() + " device designed by " + browser.getPlatform().vendor})
+      {usernameOrEmail: this.state.emailorusername})
       .then(function (response) {
         console.log(response);
-        console.log(Bowser.parse(window.navigator.userAgent));
       })
     }
   render(){
