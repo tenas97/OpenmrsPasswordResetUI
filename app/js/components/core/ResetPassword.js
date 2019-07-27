@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
 import PasswordStrengthMeter from './PasswordStrengthMeter'
+import Toast from './Toast'
 
 class ResetPassword extends React.Component {
     constructor(props) {
@@ -40,12 +41,6 @@ class ResetPassword extends React.Component {
         console.log(response);
       })
     }
-  }
-
-  handleChange(e){
-    this.setState({
-      passwordConfirmation: e.target.value,
-    })
   }
 
   render(){
@@ -102,7 +97,11 @@ class ResetPassword extends React.Component {
                   placeholder="Confirm Password"
                   value={this.state.passwordConfirmation}
                   name="newPassword"
-                  onChange={this.handleChange}
+                  onChange={e =>
+                    this.setState({
+                        passwordConfirmation: e.target.value,
+                    })
+                  }
               />
             </p>
         </fieldset>
