@@ -59,11 +59,6 @@ class ResetPassword extends React.Component {
     if(this.state.password){
      passwordStrength= <PasswordStrengthMeter password={this.state.password}/>  
     }
-    const PasswordStrengthMeter = ({ }) => (
-      <div>
-        <p>{phoneNumber}</p>
-      </div>
-   )
     return (
     <div id="body-wrapper">
       <div id="content">
