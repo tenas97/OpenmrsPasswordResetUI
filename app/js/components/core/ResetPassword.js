@@ -11,13 +11,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
 import PasswordStrengthMeter from './PasswordStrengthMeter'
-import Toast from './Toast'
 
 class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.state = {
             password: "",
             passwordConfirmation: "",
@@ -61,6 +59,11 @@ class ResetPassword extends React.Component {
     if(this.state.password){
      passwordStrength= <PasswordStrengthMeter password={this.state.password}/>  
     }
+    const PasswordStrengthMeter = ({ }) => (
+      <div>
+        <p>{phoneNumber}</p>
+      </div>
+   )
     return (
     <div id="body-wrapper">
       <div id="content">
