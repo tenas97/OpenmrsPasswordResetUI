@@ -38,13 +38,6 @@ class App extends React.Component {
         console.log(response);        
         this.setState(() => ({ errorMessage: false, validation: true}));
       })
-      .catch(error => { 
-          this.setState({
-            errorMessage: true,
-            validation: true
-          })
-        console.log(error);
-      })
     }
 
     showMessage(){
