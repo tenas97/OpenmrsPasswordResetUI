@@ -10,7 +10,8 @@ import React from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
-import PasswordStrengthMeter from './PasswordStrengthMeter'
+import './PasswordStrengthMeter.css';
+import zxcvbn from 'zxcvbn';
 
 class ResetPassword extends React.Component {
     constructor(props) {
@@ -19,8 +20,9 @@ class ResetPassword extends React.Component {
         this.state = {
             password: "",
             passwordConfirmation: "",
-            error: "",
             activationKey: "",
+            passwordStrengthScore: "",
+            disabled: "",
         };
       }
 
@@ -29,6 +31,43 @@ class ResetPassword extends React.Component {
           activationKey: this.props.params.activationKey
         })
      }
+     createPasswordLabel(){
+      const testedResult = zxcvbn(this.state.password); 
+      switch (testedResult.score) {
+        case 0:
+          return 'Weak';
+        case 1:
+          return 'Weak';
+        case 2:
+          return 'Fair';
+        case 3:
+          return 'Good';
+        case 4:
+          return 'Strong';
+        default:
+          return 'Weak';
+      }
+    }
+
+    displayPasswordStrengthMeter(){
+      const { password } = this.state;
+    const testedResult = zxcvbn(password);
+    return (
+      <div className="password-strength-meter">
+        <progress
+          className={`password-strength-meter-progress strength-${this.createPasswordLabel()}`}
+          value={testedResult.score}
+          max="4"
+        />
+        <br />
+        <label
+          className="password-strength-meter-label"
+        >
+              <strong>Password strength:</strong> {this.createPasswordLabel(testedResult)}
+        </label>
+      </div>
+    );
+    }
 
   handleSubmit(e){
     e.preventDefault();
@@ -42,23 +81,7 @@ class ResetPassword extends React.Component {
   }
 
   render(){
-    let notification;
-    let passwordStrength;
-    let flag = true;
-    let disabled = "";
-    if(this.state.password === this.state.passwordConfirmation){
-      flag = true;
-    }
-    else{
-       flag = false
-       disabled =true;
-    }
-    if(!flag && this.state.passwordConfirmation){
-      notification = <span className='message'><i>(Passwords do not match)</i></span>
-    }
-    if(this.state.password){
-     passwordStrength= <PasswordStrengthMeter password={this.state.password}/>  
-    }
+    const {password, passwordConfirmation, passwordStrengthScore, disabled} = this.state;
     return (
     <div id="body-wrapper">
       <div id="content">
@@ -79,16 +102,18 @@ class ResetPassword extends React.Component {
                   onChange={e =>
                       this.setState({
                           password: e.target.value,
+                          passwordStrengthScore: zxcvbn(e.target.value).score,
                       })
                   }
                   autoFocus
               />
             </p>
-            {passwordStrength}
+            {password && this.displayPasswordStrengthMeter() }
                     
           <p className="left">
           <label>
-              Confirm New Password  {notification}
+              Confirm New Password  {(password !== passwordConfirmation && passwordConfirmation!="") && 
+                                       <span className='message'><i>(Passwords do not match)</i></span> }
           </label>
             <input
               type="password"
@@ -98,7 +123,13 @@ class ResetPassword extends React.Component {
                   onChange={e =>
                     this.setState({
                         passwordConfirmation: e.target.value,
-                    })
+                        passwordStrengthScore: zxcvbn(e.target.value).score,
+                    }, () =>{if(password !== passwordConfirmation || passwordConfirmation!=""){
+                      this.setState({disabled : true})
+                    }else{
+                      this.setState({disabled : false})
+                    }}
+                    )
                   }
               />
             </p>
@@ -108,7 +139,7 @@ class ResetPassword extends React.Component {
                   className="confirm"
                   id="passwordResetButton"
                   type="submit"
-                  disabled={disabled}
+                  disabled={disabled && passwordStrengthScore<2 && passwordConfirmation!=""}
               >
                   Reset Your Password
               </button>
