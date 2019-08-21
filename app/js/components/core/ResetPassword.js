@@ -12,25 +12,25 @@ import { faUnlock } from '@fortawesome/free-solid-svg-icons'
 import Axios from 'axios'
 import './PasswordStrengthMeter.css';
 import zxcvbn from 'zxcvbn';
+import Redirect from 'react-router-dom'
 
 class ResetPassword extends React.Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showMessage = this.showMessage.bind(this);
         this.state = {
             password: "",
             passwordConfirmation: "",
-            activationKey: "",
+            activationKey: props.params.activationKey,
             passwordStrengthScore: "",
             disabled: "",
+            errorMessage: "",
+            errorMessageContent: "",
+            validation: false
         };
       }
 
-      componentDidMount() {
-        this.setState({
-          activationKey: this.props.params.activationKey
-        })
-     }
      createPasswordLabel(){
       const testedResult = zxcvbn(this.state.password); 
       switch (testedResult.score) {
@@ -69,22 +69,67 @@ class ResetPassword extends React.Component {
     );
     }
 
+    showMessage(){
+      const {errorMessageContent} = this.state;
+      if(this.state.errorMessage === false){
+        return (<div id="error-message" className="note-container">
+        <div className="note success">
+            <div className="text">
+                <i className="icon-remove medium"></i>
+                
+                    <p>Password Reset Successful.</p>
+                
+            </div>
+            <div className="close-icon"><i className="icon-remove"></i></div>
+        </div>
+    </div>)
+      }
+      else if (this.state.errorMessage === true) {
+        return(
+          <div id="error-message" className="note-container">
+                            <div className="note error">
+                                <div className="text">
+                                    <i className="icon-remove medium"></i>
+                                    
+                                        <p>{`Password Reset Unsuccessful. ${errorMessageContent}`}</p>
+                                    
+                                </div>
+                                <div className="close-icon"><i className="icon-remove"></i></div>
+                            </div>
+                        </div>
+        )
+      }
+    }
+
   handleSubmit(e){
     e.preventDefault();
-    let activationKeyString = this.state.activationKey;
+    const {activationKey} = this.state;
     if(this.state.password === this.state.passwordConfirmation){
-      Axios.post(`http://localhost:8080/openmrs/ws/rest/v1/passwordreset/${activationKeyString}`, {newPassword: this.state.password })
-      .then(function (response) {
+      Axios.post(`http://localhost:8080/openmrs/ws/rest/v1/passwordreset/${activationKey}`, {newPassword: this.state.password })
+      .then(response => {
         console.log(response);
+        this.setState({
+          errorMessage: false,
+          validation: true,
+        }) 
+       })
+      .catch(error => { 
+        console.log(error.response.data.error.message);
+        this.setState({
+          errorMessage: true,
+          validation: true,
+          errorMessageContent: error.response.data.error.message,
+        })
       })
     }
   }
 
   render(){
-    const {password, passwordConfirmation, passwordStrengthScore, disabled} = this.state;
+    const {password, passwordConfirmation, passwordStrengthScore, disabled, validation} = this.state;
     return (
     <div id="body-wrapper">
       <div id="content">
+      {validation ? ( this.showMessage() ) : ('')}
       <form id="password_reset">
         <fieldset>
           <legend>
@@ -124,11 +169,7 @@ class ResetPassword extends React.Component {
                     this.setState({
                         passwordConfirmation: e.target.value,
                         passwordStrengthScore: zxcvbn(e.target.value).score,
-                    }, () =>{if(password !== passwordConfirmation || passwordConfirmation!=""){
-                      this.setState({disabled : true})
-                    }else{
-                      this.setState({disabled : false})
-                    }}
+                    }
                     )
                   }
               />
@@ -139,7 +180,7 @@ class ResetPassword extends React.Component {
                   className="confirm"
                   id="passwordResetButton"
                   type="submit"
-                  disabled={disabled && passwordStrengthScore<2 && passwordConfirmation!=""}
+                  disabled={!(password === passwordConfirmation && passwordStrengthScore>1)}
               >
                   Reset Your Password
               </button>

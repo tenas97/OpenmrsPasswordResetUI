@@ -27,11 +27,13 @@ class App extends React.Component {
 
       handleSubmit(e) {
         e.preventDefault();
-      //   if(this.state.emailorusername){
-      //   this.setState({
-      //     validation: true
-      //   });
-      // }
+      // Axios(' http://localhost:8080/openmrs/ws/rest/v1/passwordreset', 
+      // {method: "post",
+      // data: {usernameOrEmail: this.state.emailorusername},
+      // auth: {
+      //   username: 'admin',
+      //   password: 'Nas12345'
+      // }})
       Axios.post(' http://localhost:8080/openmrs/ws/rest/v1/passwordreset', 
       {usernameOrEmail: this.state.emailorusername})
       .then(response => {  
@@ -76,9 +78,6 @@ class App extends React.Component {
       <div id="body-wrapper">
       <div id="content">
       {validation ? ( this.showMessage() ) : ('')}
-      {/* <div>
-        <Toast email={this.state.emailorusername} type="email" success="success"></Toast>
-      </div> */}
       <form id="password_reset">
         <fieldset>
           <legend>
